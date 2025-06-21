@@ -10,8 +10,9 @@ const useContentContextHook = () => {
 }
 
 const ContentProvider = ({children}) => {
+    const value = {};
     return (
-        <ContentContext.Provider>
+        <ContentContext.Provider value={value}>
             {children}
         </ContentContext.Provider>
     )

@@ -1,0 +1,30 @@
+import { createContext, useContext } from "react";
+
+
+
+const ContentContext = createContext();
+
+const useContentContextHook = () => {
+    const value = useContext(ContentContext);
+    return value;
+}
+
+const ContentProvider = ({children}) => {
+    return (
+        <ContentContext.Provider>
+            {children}
+        </ContentContext.Provider>
+    )
+}
+
+
+export {ContentContext, useContentContextHook};
+export default ContentProvider;
+
+/*
+1. Create Context.
+2. Create custom hook.
+3. Create Provider.
+4. Return 
+
+*/

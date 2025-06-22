@@ -23,7 +23,7 @@ const NavbarTitle = styled.p`
   line-height: 22px;
   margin: 0;
 
-  @media (min-width: 786px) {
+  @media (min-width: 768px) {
     font-size: 18px;
     line-height: 24px;
   }

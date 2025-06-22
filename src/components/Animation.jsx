@@ -21,7 +21,7 @@ const AnimatedBackground = () => {
       constructor() {
         this.x = random(0, width);
         this.y = random(0, height);
-        this.radius = random(2, 10);
+        this.radius = random(2, 6);
         this.opacity = random(0.18, 0.24); 
         this.color = `rgba(189, 106, 255, ${this.opacity})`; // Glowing purple
         this.speedX = random(-0.3, 0.3);

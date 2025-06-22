@@ -61,13 +61,18 @@ const ContentProvider = ({children}) => {
 
         setLoading(true);
         const addContent = await addContentAPI(url);
+        
         setLoading(false);
 
         if(addContent?.status) {
             setContentDisplay(true);
             setGeneratedContent(addContent?.data);
         } else {
-            toast.error("Something went wrong. Please try again later.");
+            if(addContent?.message) {
+                toast.error(addContent?.message);
+            } else {
+                toast.error("Something went wrong. Please try again later.");
+            }
             return;
         }
     }

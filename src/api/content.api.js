@@ -1,4 +1,4 @@
-const basePath = "http://localhost:8080/api/content"
+const basePath = "https://content-extractor-5yc4.onrender.com/api/content";
 
 export const addContentAPI = async (url) => {
     try {

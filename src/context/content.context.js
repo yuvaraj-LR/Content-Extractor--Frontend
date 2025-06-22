@@ -1,6 +1,11 @@
 import { createContext, useContext } from "react";
 
-
+/*
+1. Create Context.
+2. Create custom hook.
+3. Create Provider.
+4. Return 
+*/
 
 const ContentContext = createContext();
 
@@ -18,14 +23,5 @@ const ContentProvider = ({children}) => {
     )
 }
 
-
 export {ContentContext, useContentContextHook};
 export default ContentProvider;
-
-/*
-1. Create Context.
-2. Create custom hook.
-3. Create Provider.
-4. Return 
-
-*/

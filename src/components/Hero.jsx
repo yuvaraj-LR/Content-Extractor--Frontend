@@ -65,7 +65,7 @@ const Hero = () => {
     <HeroContainer>
       <HeroMainText>From raw pages to clean text, instantly and reliably.</HeroMainText>
 
-      <HeroSubHeading>Need structured content from a website? Webstract does it for you. Simply paste a URL, and our AI engine processes the page, extracts valuable information, and gives it back to you in a ready-to-use format. </HeroSubHeading>
+      <HeroSubHeading>Paste any URL. Webstract instantly extracts clean, structured content using AI — ready for you to use, summarize, or analyze. </HeroSubHeading>
     </HeroContainer>
   )
 }

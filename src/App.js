@@ -1,3 +1,5 @@
+import { ToastContainer } from 'react-toastify';
+
 import './App.css';
 import WebstractAnimations from './components/Animation.jsx';
 import ContentProvider from './context/content.context.js';
@@ -9,6 +11,8 @@ function App() {
   return (
     <div className="App">
       <div className="container">
+        <ToastContainer theme="colored"/>
+        
         <ErrorBoundary>
           <ContentProvider>
 

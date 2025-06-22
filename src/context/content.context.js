@@ -1,4 +1,6 @@
 import { createContext, useContext, useState } from "react";
+import { toast } from "react-toastify";
+import { addContentAPI } from "../api/content.api";
 
 /*
 1. Create Context.
@@ -31,8 +33,46 @@ const ContentProvider = ({children}) => {
 
     const [contentDisplay, setContentDisplay] = useState(false);
     const [generatedContent, setGeneratedContent] = useState({});
+    const [url, setUrl] = useState("");
+    const [loading, setLoading] = useState(false);
 
-    const value = { contentDisplay, setContentDisplay, generatedContent };
+    function isValidUrl(urlString) {
+        try {
+            new URL(urlString);
+            return true;
+        } catch (error) {
+            return false;
+        }
+    }
+
+    const handleSubmitForm = async(e) => {
+        e.preventDefault();
+
+        if(!url) {
+            toast.error("Please enter the url.");
+            return;
+        }
+
+        if(!isValidUrl(url)) {
+            toast.error("Please enter a valid url.");
+            setUrl("");
+            return;
+        }   
+
+        setLoading(true);
+        const addContent = await addContentAPI(url);
+        setLoading(false);
+
+        if(addContent?.status) {
+            setContentDisplay(true);
+            setGeneratedContent(addContent?.data);
+        } else {
+            toast.error("Something went wrong. Please try again later.");
+            return;
+        }
+    }
+
+    const value = { contentDisplay, setContentDisplay, generatedContent, url, setUrl, handleSubmitForm, loading };
 
     return (
         <ContentContext.Provider value={value}>

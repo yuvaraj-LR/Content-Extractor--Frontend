@@ -1,6 +1,8 @@
 import React from 'react'
 import styled from 'styled-components'
 import { StaticImage } from '../static/image';
+import { useContentContextHook } from '../context/content.context';
+import { PulseLoader } from 'react-spinners';
 
 const FormContainer = styled.form`
   display: flex;
@@ -37,7 +39,8 @@ const SubmitButton = styled.button`
   min-height: 50px;
   cursor: pointer;
   transition: all 0.2s ease-in-out;
-
+  font-size: 16px;
+  font-weight: 500;
   &:hover {
     background: #240751;
     background: linear-gradient(144deg,rgba(36, 7, 81, 1) 0%, rgba(0, 0, 0, 1) 100%);
@@ -54,13 +57,26 @@ const LinkImage = styled.img`
   left: 16px;
 ` 
 
+const Loader = styled.div`
+  position: absolute;
+  top: calc(50% + 60px);
+  left: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 25;
+`
+
 const InputForm = () => {
+
+  const { url, setUrl, handleSubmitForm, loading } = useContentContextHook();
+
   return (
     <>
-      <FormContainer>
+      <FormContainer onSubmit={(e) => handleSubmitForm(e)}>
         <LinkImage src={StaticImage.LinkIcon} alt="Link-icon"  />
 
-        <InputField placeholder='Enter a public url (https://www.google.com/)'></InputField>
+        <InputField value={url} onChange={(e) => setUrl(e.target.value)} placeholder='Enter a public url (https://www.google.com/)' />
+
+        { loading ? <Loader> <PulseLoader color='#ffffff' /></Loader> : null }
 
         <SubmitButton>Extract Now</SubmitButton>
       </FormContainer>

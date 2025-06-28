@@ -46,7 +46,6 @@ const SubmitButton = styled.button`
     background: linear-gradient(144deg,rgba(36, 7, 81, 1) 0%, rgba(0, 0, 0, 1) 100%);
     transform: scale(1.02);
   }
-
 `;
 
 const LinkImage = styled.img`

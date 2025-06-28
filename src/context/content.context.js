@@ -1,6 +1,6 @@
-import { createContext, useContext, useState } from "react";
+import { createContext, useContext, useEffect, useState } from "react";
 import { toast } from "react-toastify";
-import { addContentAPI } from "../api/content.api";
+import { addContentAPI, getContentAPI } from "../api/content.api";
 
 /*
 1. Create Context.
@@ -35,6 +35,26 @@ const ContentProvider = ({children}) => {
     const [generatedContent, setGeneratedContent] = useState({});
     const [url, setUrl] = useState("");
     const [loading, setLoading] = useState(false);
+    const [DBContentData, setDBContentData] = useState([]);
+    const [readMorePopup, setReadMorePopup] = useState({});
+
+    useEffect(() => {
+        const fetchData = async () => {
+        try {
+            setLoading(true);
+            const contentData = await getContentAPI();
+            console.log("CONTENT: ", contentData);
+            if(contentData?.status) {
+                setDBContentData(contentData?.data);
+                setLoading(false);
+            }
+        } catch (error) {
+            console.error("Failed to fetch content data:", error);
+        }
+        };
+
+        fetchData();
+    }, []);
 
     function isValidUrl(urlString) {
         try {
@@ -77,7 +97,15 @@ const ContentProvider = ({children}) => {
         }
     }
 
-    const value = { contentDisplay, setContentDisplay, generatedContent, url, setUrl, handleSubmitForm, loading };
+    const handleReadMoreClick = (i) => {
+        setReadMorePopup(DBContentData[i]);
+    }
+
+    const handleDeleteClick = (i) => {
+
+    }
+
+    const value = { contentDisplay, setContentDisplay, generatedContent, url, setUrl, handleSubmitForm, loading, DBContentData, handleReadMoreClick, handleDeleteClick, readMorePopup };
 
     return (
         <ContentContext.Provider value={value}>

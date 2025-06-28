@@ -1,5 +1,8 @@
 import styled from 'styled-components'
 import { StaticImage } from '../static/image';
+import Popup from '../components/Popup';
+import { useContentContextHook } from '../context/content.context';
+import { PulseLoader } from 'react-spinners';
 
 const TableHead = styled.div`
   display: grid;
@@ -57,6 +60,7 @@ const ReadMoreButton = styled.button`
   border: none;
   padding: 4px 8px;
   border-radius: 4px;
+  cursor: pointr;
 `;
 
 const DeleteButton = styled.button`
@@ -65,6 +69,7 @@ const DeleteButton = styled.button`
   border: none;
   padding: 4px 8px;
   border-radius: 4px;
+  cursor: pointer;
 `;
 
 
@@ -96,6 +101,7 @@ const SearchContainer = styled.div`
   gap: 16px;
   margin-bottom: 16px;
   min-width: 50%;
+  position: relative;
 `;
 
 const SortByContainer = styled.div`
@@ -107,7 +113,7 @@ const FeatureHead = styled.h2`
 `;
 
 const SearchInput = styled.input`
-  padding: 4px 8px;
+  padding: 4px 4px 4px 36px;
   border-radius: 10px;
   width: 100%;
 `;
@@ -149,69 +155,72 @@ const DeleteImg = styled.img`
   }
 `;
 
+const SearchIconImg = styled.img`
+  position: absolute;
+  width: 20px;
+  height: 20px;
+  top: 10px;
+  left: 10px;
+`;
+
+const Loader = styled.div`
+  position: absolute;
+  top: calc(50% + 60px);
+  left: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 25;
+`
+
 const Feature = () => {
-  const dummyData = [
-    {
-      id: 1, 
-      title: "Magzter",
-      description: "DescriptionDescriptionDescriptionDescriptionDescriptionDescriptionDescriptionDescriptionDescriptionDescriptionDescriptionDescriptionDescriptionDescriptionDescriptionDescriptionDescriptionDescriptionDescriptionDescriptionDescriptionDescriptionDescriptionDescriptionDescriptionDescriptionDescriptionDescription",
-      keypoints: [
-        "key-1",
-        "key-2"
-      ]
-    },
-    {
-      id: 2, 
-      title: "Google",
-      description: "Description",
-      keypoints: [
-        "key-1",
-        "key-2"
-      ]
-    }
-  ]
+  const { DBContentData, loading, handleReadMoreClick, handleDeleteClick, readMorePopup } = useContentContextHook();
 
   return (
     <>
-      <FeatureHead>Previously searched: </FeatureHead>
+      {readMorePopup?.url ? <Popup data={readMorePopup} /> : null }
 
-      <OptionsContainer>
-        <SearchContainer>
-          <SearchInput type="text" placeholder='Search By Title' />
-          <SubmitButton>Search</SubmitButton>
-        </SearchContainer>
+      { loading ? 
+      
+      <Loader> <PulseLoader color='#ffffff' /></Loader> :
+      
+      <>
+        <FeatureHead>Previously searched: </FeatureHead>
 
-        <SortByContainer>
+        <OptionsContainer>
+          <SearchContainer>
+            <SearchIconImg src={StaticImage.SearchIcon} alt="Search Icon" />
+            <SearchInput type="text" placeholder='Search By Title' />
+            <SubmitButton>Search</SubmitButton>
+          </SearchContainer>
+        </OptionsContainer>
 
-        </SortByContainer>
-      </OptionsContainer>
-      <TableContainer>
-        <TableHead>
-          <TableHeadList>Id</TableHeadList>
-          <TableHeadList>Title</TableHeadList>
-          <TableHeadListDes>Description</TableHeadListDes>
-          <TableHeadList>Actions</TableHeadList>
-        </TableHead>
+        <TableContainer>
+          <TableHead>
+            <TableHeadList>Id</TableHeadList>
+            <TableHeadList>Title</TableHeadList>
+            <TableHeadListDes>Description</TableHeadListDes>
+            <TableHeadList>Actions</TableHeadList>
+          </TableHead>
 
-        <TableBody>
-          {
-            dummyData.map((data, i) => (
-              <TableBodyRow>
-                <TableBodyListId>{i + 1}</TableBodyListId>
-                <TableBodyListTitle>{data.title}</TableBodyListTitle>
-                <TableBodyListDescription>{data.description}</TableBodyListDescription>
-                <TableActions>
-                  <ReadMoreButton>Read More</ReadMoreButton>
-                  <DeleteButton>
-                    <DeleteText>Delete</DeleteText>
-                    <DeleteImg src={StaticImage.DeleteIcon} />
-                  </DeleteButton>
-                </TableActions>
-              </TableBodyRow>
-            ))
-          }
-        </TableBody>
-      </TableContainer>
+          <TableBody>
+            {
+              DBContentData.map((data, i) => (
+                <TableBodyRow key={i}>
+                  <TableBodyListId>{i + 1}</TableBodyListId>
+                  <TableBodyListTitle>{data.extractedContent.title.split(":")[0]}</TableBodyListTitle>
+                  <TableBodyListDescription>{data.extractedContent.summary}</TableBodyListDescription>
+                  <TableActions>
+                    <ReadMoreButton onClick={(e) => handleReadMoreClick(i)} >Read More</ReadMoreButton>
+                    <DeleteButton onClick={(e) => handleDeleteClick(i)}>
+                      <DeleteText>Delete</DeleteText>
+                      <DeleteImg src={StaticImage.DeleteIcon} />
+                    </DeleteButton>
+                  </TableActions>
+                </TableBodyRow>
+              ))
+            }
+          </TableBody>
+        </TableContainer>
+      </>}
     </>
   )
 }

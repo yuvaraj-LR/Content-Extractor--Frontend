@@ -142,8 +142,9 @@ const Description = styled.h2`
     background-clip: text;
 `;
 
-const ContentExtraction = () => {
-    const { generatedContent } = useContentContextHook();
+const ContentExtraction = ({popupData}) => {
+    let { generatedContent } = useContentContextHook();
+    generatedContent = popupData ? popupData : generatedContent;
 
     return (
         <>

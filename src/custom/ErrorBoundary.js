@@ -21,7 +21,7 @@ class ErrorBoundary extends React.Component {
   render() {
     if (this.state.hasError) {
       return (
-        <div style={{ padding: "2rem", textAlign: "center" }}>
+        <div style={{ display: "flex", flexDirection: "column", gap: "1rem", justifyContent:"center", alignItems: "center", padding: "2rem", textAlign: "center" }}>
           <h2>Oops! Something went wrong.</h2>
           <p>We're sorry for the inconvenience.</p>
           <button onClick={this.handleReload} style={{ padding: "0.5rem 1rem" }}>

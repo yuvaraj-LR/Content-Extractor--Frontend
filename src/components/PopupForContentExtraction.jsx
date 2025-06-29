@@ -144,7 +144,19 @@ const Description = styled.h2`
 
 const ContentExtraction = ({popupData}) => {
     let { generatedContent } = useContentContextHook();
-    generatedContent = popupData ? popupData : generatedContent;
+
+    console.log(generatedContent, "Content123");
+
+    const {
+        title = "",
+        summary = "",
+        keypoints = [],
+    } = popupData
+        ? popupData
+        : generatedContent.status
+        ? generatedContent.extractedData || {}
+        : generatedContent || {};
+
 
     return (
         <>
@@ -153,17 +165,17 @@ const ContentExtraction = ({popupData}) => {
                     <Description>AI-Generated Summary of the Web Page</Description>
                     <Container>
                         <Title>Title: </Title>
-                        <TitleHead>{generatedContent.title}</TitleHead>
+                        <TitleHead>{title}</TitleHead>
                     </Container>
                     <Container>
                         <Title>Summary: </Title>
-                        <TitleHead>{generatedContent.summary}</TitleHead>
+                        <TitleHead>{summary}</TitleHead>
                     </Container>
                     
                     <Container>
                         <Title>Keypoints: </Title>
                         <KeypointContainer>
-                            {generatedContent.keypoints.map((keypoint, i) => (
+                            {keypoints.map((keypoint, i) => (
                                 <KeypointItem key={i}>{keypoint}</KeypointItem>
                             ))}
                         </KeypointContainer>

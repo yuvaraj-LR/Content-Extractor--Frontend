@@ -60,7 +60,7 @@ const ReadMoreButton = styled.button`
   border: none;
   padding: 4px 8px;
   border-radius: 4px;
-  cursor: pointr;
+  cursor: pointer;
 `;
 
 const DeleteButton = styled.button`
@@ -71,7 +71,6 @@ const DeleteButton = styled.button`
   border-radius: 4px;
   cursor: pointer;
 `;
-
 
 const TableContainer = styled.div`
 `;
@@ -102,9 +101,6 @@ const SearchContainer = styled.div`
   margin-bottom: 16px;
   min-width: 50%;
   position: relative;
-`;
-
-const SortByContainer = styled.div`
 `;
 
 const FeatureHead = styled.h2`
@@ -209,8 +205,8 @@ const Feature = () => {
                   <TableBodyListTitle>{data.extractedContent.title.split(":")[0]}</TableBodyListTitle>
                   <TableBodyListDescription>{data.extractedContent.summary}</TableBodyListDescription>
                   <TableActions>
-                    <ReadMoreButton onClick={(e) => handleReadMoreClick(i)} >Read More</ReadMoreButton>
-                    <DeleteButton onClick={(e) => handleDeleteClick(i)}>
+                    <ReadMoreButton onClick={(e) => handleReadMoreClick(i, data._id)} >Read More</ReadMoreButton>
+                    <DeleteButton onClick={(e) => handleDeleteClick(i, data._id)}>
                       <DeleteText>Delete</DeleteText>
                       <DeleteImg src={StaticImage.DeleteIcon} />
                     </DeleteButton>

@@ -34,3 +34,24 @@ export const getContentAPI = async () => {
         console.log(error);
     }
 }
+
+export const deleteContentAPI = async (id) => {
+    try {
+        const options = {
+            method: "DELETE",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify({ id })
+        };
+
+        const deleteContentReq = await fetch(basePath, options);
+        const deleteContentRes = await deleteContentReq.json();
+
+        console.log(deleteContentRes, "RESS..");
+        
+        return deleteContentRes;
+    } catch (error) {
+        console.log(error);
+    }
+}

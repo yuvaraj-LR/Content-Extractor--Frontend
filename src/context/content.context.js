@@ -1,6 +1,6 @@
 import { createContext, useContext, useEffect, useState } from "react";
 import { toast } from "react-toastify";
-import { addContentAPI, getContentAPI } from "../api/content.api";
+import { addContentAPI, deleteContentAPI, getContentAPI } from "../api/content.api";
 
 /*
 1. Create Context.
@@ -86,7 +86,12 @@ const ContentProvider = ({children}) => {
 
         if(addContent?.status) {
             setContentDisplay(true);
-            setGeneratedContent(addContent?.data);
+            
+            setGeneratedContent(addContent?.extractedData ? addContent.extractedData : addContent?.addedData);
+
+            if(addContent?.status) {
+                setDBContentData(addContent?.data);
+            }
         } else {
             if(addContent?.message) {
                 toast.error(addContent?.message);
@@ -97,12 +102,19 @@ const ContentProvider = ({children}) => {
         }
     }
 
-    const handleReadMoreClick = (i) => {
+    const handleReadMoreClick = (i, id) => {
         setReadMorePopup(DBContentData[i]);
     }
 
-    const handleDeleteClick = (i) => {
+    const handleDeleteClick = async (i, id) => {
+        setLoading(true);
+        const deleteHistory = await deleteContentAPI(id);
+        setLoading(false);
 
+        if(deleteHistory.status) {
+            toast.success("Deleted Successfully.");
+            setDBContentData(deleteHistory.data);
+        } 
     }
 
     const value = { contentDisplay, setContentDisplay, generatedContent, url, setUrl, handleSubmitForm, loading, DBContentData, handleReadMoreClick, handleDeleteClick, readMorePopup };

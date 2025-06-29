@@ -1,6 +1,6 @@
 import { createContext, useContext, useEffect, useState } from "react";
 import { toast } from "react-toastify";
-import { addContentAPI, deleteContentAPI, getContentAPI } from "../api/content.api";
+import { addContentAPI, deleteContentAPI, getContentAPI, searchContentAPI } from "../api/content.api";
 
 /*
 1. Create Context.
@@ -37,6 +37,8 @@ const ContentProvider = ({children}) => {
     const [loading, setLoading] = useState(false);
     const [DBContentData, setDBContentData] = useState([]);
     const [readMorePopup, setReadMorePopup] = useState({});
+    const [searchInput, setSearchInput] = useState('');
+    const [searchResult, setSearchResults] = useState([]);
 
     useEffect(() => {
         const fetchData = async () => {
@@ -117,7 +119,33 @@ const ContentProvider = ({children}) => {
         } 
     }
 
-    const value = { contentDisplay, setContentDisplay, generatedContent, url, setUrl, handleSubmitForm, loading, DBContentData, handleReadMoreClick, handleDeleteClick, readMorePopup };
+    const handleSearchInputClick = async (e) => {
+        // e.preventDefault();
+
+        if (!searchInput) setSearchResults(DBContentData);
+
+        try {
+            setLoading(true);
+            const result = await searchContentAPI(searchInput)
+            console.log("SEARCH: ", result);
+            setLoading(false);
+
+            if (result.status) {
+                setSearchResults(result.data);
+            } else {
+                toast.error(result.message || "No results found");
+            }
+        } catch (error) {
+            toast.error("Search failed");
+        }
+    }
+
+    const handleInputKeyPress = async (value, e) => {
+        setSearchInput(value);
+        await handleSearchInputClick(e);
+    }
+
+    const value = { contentDisplay, setContentDisplay, generatedContent, url, setUrl, handleSubmitForm, loading, DBContentData, handleReadMoreClick, handleDeleteClick, readMorePopup, searchInput, setSearchInput, handleSearchInputClick, searchResult, handleInputKeyPress };
 
     return (
         <ContentContext.Provider value={value}>

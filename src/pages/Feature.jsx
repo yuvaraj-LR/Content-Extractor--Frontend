@@ -3,6 +3,7 @@ import { StaticImage } from '../static/image';
 import Popup from '../components/Popup';
 import { useContentContextHook } from '../context/content.context';
 import { PulseLoader } from 'react-spinners';
+import { useEffect } from 'react';
 
 const TableHead = styled.div`
   display: grid;
@@ -168,7 +169,20 @@ const Loader = styled.div`
 `
 
 const Feature = () => {
-  const { DBContentData, loading, handleReadMoreClick, handleDeleteClick, readMorePopup } = useContentContextHook();
+  const { DBContentData, loading, handleReadMoreClick, handleDeleteClick, readMorePopup, searchInput, handleSearchInputClick, handleInputKeyPress, setSearchInput, searchResult } = useContentContextHook();
+
+  const displayData = searchResult.length > 0 ? searchResult : DBContentData;
+
+  useEffect(() => {
+    const delayDebounce = setTimeout((e) => {
+        if (searchInput.trim()) {
+            handleInputKeyPress(searchInput, e);
+        }
+    }, 500);
+
+      return () => clearTimeout(delayDebounce);
+  }, [searchInput]);
+
 
   return (
     <>
@@ -184,8 +198,14 @@ const Feature = () => {
         <OptionsContainer>
           <SearchContainer>
             <SearchIconImg src={StaticImage.SearchIcon} alt="Search Icon" />
-            <SearchInput type="text" placeholder='Search By Title' />
-            <SubmitButton>Search</SubmitButton>
+              <SearchInput 
+                type="text" 
+                placeholder='Search By Title' 
+                value={searchInput} 
+                onChange={(e) => setSearchInput(e.target.value)} 
+              />
+
+            <SubmitButton onClick={(e) => handleSearchInputClick(e)}>Search</SubmitButton>
           </SearchContainer>
         </OptionsContainer>
 
@@ -199,7 +219,7 @@ const Feature = () => {
 
           <TableBody>
             {
-              DBContentData.map((data, i) => (
+              displayData.map((data, i) => (
                 <TableBodyRow key={i}>
                   <TableBodyListId>{i + 1}</TableBodyListId>
                   <TableBodyListTitle>{data.extractedContent.title.split(":")[0]}</TableBodyListTitle>

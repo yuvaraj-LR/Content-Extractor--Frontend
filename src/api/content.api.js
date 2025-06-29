@@ -55,3 +55,18 @@ export const deleteContentAPI = async (id) => {
         console.log(error);
     }
 }
+
+export const searchContentAPI = async (query) => {
+    try {
+        const options = {
+            method: "GET",
+        }
+
+        const searchReq = await fetch(`${basePath}search?query=${query}`, options);
+        const searchRes = await searchReq.json();
+
+        return searchRes;
+    } catch (error) {
+        console.log(error);
+    }
+}
